@@ -69,7 +69,7 @@ def main():
             return "わかり手だ"
         elif "yo" in message.content.lower():
             return "yo"
-        return None
+        return "わかる"
 
 
     @client.event
