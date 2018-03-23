@@ -89,7 +89,7 @@ def main():
                 reply_text = get_mention_reply(message)
                 if reply_text:    
                     # メッセージが送られてきたチャンネルへメッセージを送ります
-                    await client.send_message(message.channel, m)
+                    await client.send_message(message.channel, reply_text)
     try:
         client.run(conf.discord_apikey)
     finally:
