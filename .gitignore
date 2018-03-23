@@ -1,3 +1,10 @@
+## User settings
+/dat/config
+/.discobot.apikeys.conf
+/.discobot/apikeys.conf
+
+## Automatical Inserted
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
