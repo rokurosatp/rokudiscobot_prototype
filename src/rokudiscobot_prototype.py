@@ -45,28 +45,49 @@ def main():
         'me', 'name', 'owner', 'permissions_for', 'recipients', 'type', 'user']
         """
 
+    def get_listen_reply(message: discord.Message):
+        """メンションなしの場合のリアクション
+        """
+        if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
+            return "おはようございます" + message.author.name + "さん！"
+        elif re.match(r"^わかり手だ", message.content):
+            return "そうだよ"
+        elif re.match(r"^わかる", message.content):
+            return "わかり手だ"
+        elif "yo" in message.content.lower():
+            return "yo"
+        return None
+
+    def get_mention_reply(message: discord.Message):
+        """メンションに対するリアクション
+        """
+        if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
+            return "おはようございます" + message.author.name + "さん！"
+        elif re.match(r"^わかり手だ", message.content):
+            return "そうだよ"
+        elif re.match(r"^わかる", message.content):
+            return "わかり手だ"
+        elif "yo" in message.content.lower():
+            return "yo"
+        return None
+
+
     @client.event
     async def on_message(message: discord.Message):
         main_channel = "bot"
         active_channels = ["dev", "bot", "Direct Message with rokusan63"]
         if client.user != message.author:
             log_message_information(message)
-            if message.channel.is_private or message.channel.name in active_channels:
-                # 「おはよう」で始まるか調べる
-                if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
-                    m = "おはようございます" + message.author.name + "さん！"
+            reply_text = None
+            # メッセージを最大１個送る
+            if not reply_text and message.channel.is_private or message.channel.name in active_channels:
+                reply_text = get_listen_reply(message)
+                if reply_text:
                     # メッセージが送られてきたチャンネルへメッセージを送ります
-                    await client.send_message(message.channel, m)
-                elif re.match(r"^わかり手だ", message.content):
-                    m = "そうだよ"
-                    # メッセージが送られてきたチャンネルへメッセージを送ります
-                    await client.send_message(message.channel, m)
-                elif re.match(r"^わかる", message.content):
-                    m = "わかり手だ"
-                    # メッセージが送られてきたチャンネルへメッセージを送ります
-                    await client.send_message(message.channel, m)
-                elif "yo" in message.content.lower():
-                    m = "yo"
+                    await client.send_message(message.channel, reply_text)
+            if not reply_text and filter(lambda member: member == client.user, message.mentions):
+                reply_text = get_mention_reply(message)
+                if reply_text:    
                     # メッセージが送られてきたチャンネルへメッセージを送ります
                     await client.send_message(message.channel, m)
     try:
