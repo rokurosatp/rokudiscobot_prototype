@@ -1,0 +1,13 @@
+[Unit]
+Description=RokudiscoBot
+After=syslog.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/root
+ExecStart=/usr/bin/python3 src/rokudiscobot_prototype.py
+TimeoutStopSec=5
+StandardOutput=null
+
+[Install]
+WantedBy = multi-user.target
