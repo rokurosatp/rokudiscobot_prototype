@@ -1,7 +1,43 @@
 from util.configloader import Config
+from util import tokenizer
+import argparse
 import discord
 import re
 import sys
+
+def get_listen_reply(message: discord.Message):
+    """メンションなしの場合のリアクション
+    """
+    if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
+        return "おはようございます" + message.author.name + "さん！"
+    elif re.match(r"^わかり手だ", message.content):
+        return "そうだよ"
+    elif re.match(r"^わかる", message.content):
+        return "わかり手だ"
+    elif re.match(r"^(強そう|つよそう)", message.content):
+        return "(小並感)"
+    elif re.match(r"^hoge", message.content):
+        return "fuga"
+    elif re.match(r"^ほげ", message.content):
+        return "ふが"
+    elif "yo" in message.content.lower():
+        return "yo"
+    return None
+
+def get_mention_reply(message: discord.Message):
+    """メンションに対するリアクション
+    """
+    if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
+        return "おはようございます" + message.author.name + "さん！"
+    elif re.match(r"^わかり手だ", message.content):
+        return "そうだよ"
+    elif re.match(r"^わかる", message.content):
+        return "わかり手だ"
+    elif tokenizer.in_class_of(message.content, classes={"太郎", "二郎", "花子", "プリウス"}):
+        return tokenizer.tokenize_mecab(message.content)
+    elif "yo" in message.content.lower():
+        return "yo"
+    return "わかる"
 
 def main():
     conf = Config.load()
@@ -45,32 +81,6 @@ def main():
         'me', 'name', 'owner', 'permissions_for', 'recipients', 'type', 'user']
         """
 
-    def get_listen_reply(message: discord.Message):
-        """メンションなしの場合のリアクション
-        """
-        if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
-            return "おはようございます" + message.author.name + "さん！"
-        elif re.match(r"^わかり手だ", message.content):
-            return "そうだよ"
-        elif re.match(r"^わかる", message.content):
-            return "わかり手だ"
-        elif "yo" in message.content.lower():
-            return "yo"
-        return None
-
-    def get_mention_reply(message: discord.Message):
-        """メンションに対するリアクション
-        """
-        if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
-            return "おはようございます" + message.author.name + "さん！"
-        elif re.match(r"^わかり手だ", message.content):
-            return "そうだよ"
-        elif re.match(r"^わかる", message.content):
-            return "わかり手だ"
-        elif "yo" in message.content.lower():
-            return "yo"
-        return "わかる"
-
 
     @client.event
     async def on_message(message: discord.Message):
@@ -96,5 +106,34 @@ def main():
         print("client exit")
         client.close()
 
+def debug_on_console():
+    class PseudoMessage:
+        def __init__(self):
+            self.content = ""
+            self.author = None
+    class PseudoUser:
+        def __init__(self, name):
+            self.name = name
+    while True:
+        message = PseudoMessage()
+        message.content = input(">")
+        if re.match(r"exit(|\(\))", message.content):
+            break
+        elif re.match(r"^(@\w+)\s+(.*)$", message.content):
+            mt = re.match(r"^(@\w+)\s(.*)$", message.content)
+            message.author = PseudoUser(mt.groups()[0])
+            message.content = mt.groups()[1]
+            reply_text = get_mention_reply(message)            
+        else:
+            reply_text = get_listen_reply(message)
+        print(reply_text)
+    
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--console", action="store_true")
+    arg = parser.parse_args()
+    if arg.console:
+        debug_on_console()
+    else:
+        main()
