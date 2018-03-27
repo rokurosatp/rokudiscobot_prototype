@@ -31,7 +31,7 @@ def get_listen_reply(message: discord.Message):
 def get_mention_reply(message: discord.Message):
     """メンションに対するリアクション
     """
-    mt = re.match("^\<\@\w+\> (.*)$", message.content)
+    mt = re.match("^\<\@\w+\>\s*(.*)$", message.content)
     content = mt.group(1)
     if re.match(r"^(おはよう|よお|よう|Hello|はろー)", content):
         return "おはようございます" + message.author.name + "さん！"
