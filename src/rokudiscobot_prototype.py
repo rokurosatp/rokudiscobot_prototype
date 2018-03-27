@@ -132,12 +132,18 @@ LOGFILE_DEFAULT = "/var/log/rokudiscobot.log"
 
 def init_logging(arg):
     logfile = arg.logfile if arg.logfile else LOGFILE_DEFAULT
-    logging.basicConfig(filename=logfile, format='%(asctime)s[%(levelname)s]:%(message)s', filemode="a")
+    loglevel = getattr(logging, arg.loglevel)
+    logging.basicConfig(filename=logfile, level=loglevel, format='%(asctime)s[%(levelname)s]:%(message)s')
+    logging.debug('login')
+    logging.info('login')
+    logging.warning('login')
+    logging.error('login')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--console", action="store_true")
     parser.add_argument("--logfile", type=str)
+    parser.add_argument("--loglevel", type=str, choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], default="WARNING")
     arg = parser.parse_args()
     init_logging(arg)
     if arg.console:
