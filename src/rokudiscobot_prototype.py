@@ -16,6 +16,8 @@ def get_listen_reply(message: discord.Message):
         return "そうだよ"
     elif re.match(r"^わかる", message.content):
         return "わかり手だ"
+    elif re.match(r"^わからん", message.content):
+        return "いや、わかる"
     elif re.match(r"^(強そう|つよそう)", message.content):
         return "(小並感)"
     elif re.match(r"^hoge", message.content):
@@ -37,6 +39,8 @@ def get_mention_reply(message: discord.Message):
         return "そうだよ"
     elif re.match(r"^わかる", content):
         return "わかり手だ"
+    elif re.match(r"^わからん", content):
+        return "いや、わかる"
     elif tokenizer.in_class_of(content, classes={"太郎", "二郎", "花子", "プリウス"}):
         return tokenizer.tokenize_mecab(content)
     elif "yo" in content.lower():
