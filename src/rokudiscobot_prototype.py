@@ -2,6 +2,7 @@ from util.configloader import Config
 from util import tokenizer
 import argparse
 import logging
+import traceback
 import discord
 import re
 import sys
@@ -47,9 +48,8 @@ def main():
     @client.event
     async def on_ready():
         logging.info('Logged in as')
-        logging.info(client.user.name)
-        logging.info(client.user.id)
-    import traceback
+        logging.info("%s" client.user.name)
+        logging.info("%s", client.user.id)
 
     def log_message_information(message: discord.Message):
         try:
@@ -132,7 +132,7 @@ LOGFILE_DEFAULT = "/var/log/rokudiscobot.log"
 
 def init_logging(arg):
     logfile = arg.logfile if arg.logfile else LOGFILE_DEFAULT
-    logging.basicConfig(filename=logfile, format='[%(asctime)s]:%(message)s', filemode="a")
+    logging.basicConfig(filename=logfile, format='%(asctime)s[%(levelname)s]:%(message)s', filemode="a")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
