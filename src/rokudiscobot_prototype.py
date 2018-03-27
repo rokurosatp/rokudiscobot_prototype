@@ -97,7 +97,7 @@ def main():
                     # メッセージが送られてきたチャンネルへメッセージを送ります
                     logging.debug("replying as listened message")
                     await client.send_message(message.channel, reply_text)
-            if not reply_text and filter(lambda member: member == client.user, message.mentions):
+            if not reply_text and any(filter(lambda member: member == client.user, message.mentions)):
                 reply_text = get_mention_reply(message)
                 if reply_text:    
                     # メッセージが送られてきたチャンネルへメッセージを送ります
