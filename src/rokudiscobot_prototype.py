@@ -53,16 +53,17 @@ def main():
 
     def log_message_information(message: discord.Message):
         try:
-            logging.debug("%s", str(message.channel.name))
-            logging.debug("%s", str(message.channel.is_private))
+            logging.debug("message.channel.name=%s", str(message.channel.name))
+            logging.debug("message.is_private=%s", str(message.channel.is_private))
             if message.channel.is_private:
-                logging.debug("%s", str(message.channel.owner))
-                logging.debug("%s", str(message.channel.recipients))
+                logging.debug("message.channel.owner=%s", str(message.channel.owner))
+                logging.debug("message.channel.recipients=%s", str(message.channel.recipients))
             else:
-                logging.debug("%s", str(dir(message)))
-            logging.debug("%s", str(message.channel_mentions))
-            logging.debug("%s", str(message.mentions))
-            logging.debug("%s", str(message.mention_everyone))
+                logging.debug("dir(message)=%s", str(dir(message)))
+            logging.debug("message.channel_mentions=%s", str(message.channel_mentions))
+            logging.debug("message.mentions=%s", str(message.mentions))
+            logging.debug("message.mention_everyone=%s", str(message.mention_everyone))
+            logging.debug("message.content=%s", str(message.content))
         except:
             exc_type, exc_val, tb = sys.exc_info()
             logging.error(traceback.format_exception(exc_type, exc_val, tb))
