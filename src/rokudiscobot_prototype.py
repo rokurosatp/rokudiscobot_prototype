@@ -48,7 +48,7 @@ def main():
     @client.event
     async def on_ready():
         logging.info('Logged in as')
-        logging.info("%s" client.user.name)
+        logging.info("%s", client.user.name)
         logging.info("%s", client.user.id)
 
     def log_message_information(message: discord.Message):
