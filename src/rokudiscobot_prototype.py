@@ -142,10 +142,6 @@ def init_logging(arg):
     logfile = arg.logfile if arg.logfile else LOGFILE_DEFAULT
     loglevel = getattr(logging, arg.loglevel)
     logging.basicConfig(filename=logfile, level=loglevel, format='%(asctime)s[%(levelname)s]:%(message)s')
-    logging.debug('login')
-    logging.info('login')
-    logging.warning('login')
-    logging.error('login')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
