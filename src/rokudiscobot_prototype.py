@@ -1,6 +1,7 @@
 from util.configloader import Config
 from util import tokenizer
 import argparse
+import logging
 import discord
 import re
 import sys
@@ -45,27 +46,26 @@ def main():
 
     @client.event
     async def on_ready():
-        print('Logged in as')
-        print(client.user.name)
-        print(client.user.id)
-        print('------')
+        logging.info('Logged in as')
+        logging.info(client.user.name)
+        logging.info(client.user.id)
     import traceback
 
     def log_message_information(message: discord.Message):
         try:
-            print(message.channel.name)
-            print(message.channel.is_private)
+            logging.debug("%s", str(message.channel.name))
+            logging.debug("%s", str(message.channel.is_private))
             if message.channel.is_private:
-                print(message.channel.owner)
-                print(message.channel.recipients)
+                logging.debug("%s", str(message.channel.owner))
+                logging.debug("%s", str(message.channel.recipients))
             else:
-                print(dir(message))
-            print(message.channel_mentions)
-            print(message.mentions)
-            print(message.mention_everyone)
+                logging.debug("%s", str(dir(message)))
+            logging.debug("%s", str(message.channel_mentions))
+            logging.debug("%s", str(message.mentions))
+            logging.debug("%s", str(message.mention_everyone))
         except:
             exc_type, exc_val, tb = sys.exc_info()
-            traceback.print_exception(exc_type, exc_val, tb)
+            logging.error(traceback.format_exception(exc_type, exc_val, tb))
         """dir(Channel)
         [..., '_clean_content', '_handle_call', '_handle_mentions',
         '_handle_upgrades', '_raw_channel_mentions', '_raw_mentions', '_raw_role_mentions',
@@ -103,7 +103,7 @@ def main():
     try:
         client.run(conf.discord_apikey)
     finally:
-        print("client exit")
+        logging.info("client exit")
         client.close()
 
 def debug_on_console():
@@ -127,12 +127,19 @@ def debug_on_console():
         else:
             reply_text = get_listen_reply(message)
         print(reply_text)
-    
+
+LOGFILE_DEFAULT = "/var/log/rokudiscobot.log"
+
+def init_logging(arg):
+    logfile = arg.logfile if arg.logfile else LOGFILE_DEFAULT
+    logging.basicConfig(logfile=logfile, format='[%(asctime)s]:%(message)s', filemode="a")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--console", action="store_true")
+    parser.add_argument("--logfile", type=str)
     arg = parser.parse_args()
+    
     if arg.console:
         debug_on_console()
     else:

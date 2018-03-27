@@ -9,6 +9,7 @@ def discover():
         root / Path(".discobot.apikeys.conf"),
         root / Path(".discobot/apikeys.conf"),
         root / Path("dat/config/apikeys.conf"),
+        Path("/etc/rokudiscobot/apikeys.conf"),
     ]
     existing = list(filter(Path.is_file, discover_list))
     if not existing:
