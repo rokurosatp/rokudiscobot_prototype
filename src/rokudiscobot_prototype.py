@@ -29,15 +29,17 @@ def get_listen_reply(message: discord.Message):
 def get_mention_reply(message: discord.Message):
     """メンションに対するリアクション
     """
-    if re.match(r"^(おはよう|よお|よう|Hello|はろー)", message.content):
+    mt = re.match("^\<\@\w+\> (.*)$", message.content)
+    content = mt.group(1)
+    if re.match(r"^(おはよう|よお|よう|Hello|はろー)", content):
         return "おはようございます" + message.author.name + "さん！"
-    elif re.match(r"^わかり手だ", message.content):
+    elif re.match(r"^わかり手だ", content):
         return "そうだよ"
-    elif re.match(r"^わかる", message.content):
+    elif re.match(r"^わかる", content):
         return "わかり手だ"
-    elif tokenizer.in_class_of(message.content, classes={"太郎", "二郎", "花子", "プリウス"}):
-        return tokenizer.tokenize_mecab(message.content)
-    elif "yo" in message.content.lower():
+    elif tokenizer.in_class_of(content, classes={"太郎", "二郎", "花子", "プリウス"}):
+        return tokenizer.tokenize_mecab(content)
+    elif "yo" in content.lower():
         return "yo"
     return "わかる"
 
