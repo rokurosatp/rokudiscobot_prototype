@@ -58,12 +58,11 @@ def main():
             if message.channel.is_private:
                 logging.debug("message.channel.owner=%s", str(message.channel.owner))
                 logging.debug("message.channel.recipients=%s", str(message.channel.recipients))
-            else:
-                logging.debug("dir(message)=%s", str(dir(message)))
             logging.debug("message.channel_mentions=%s", str(message.channel_mentions))
             logging.debug("message.mentions=%s", str(message.mentions))
             logging.debug("message.mention_everyone=%s", str(message.mention_everyone))
             logging.debug("message.content=%s", str(message.content))
+            logging.debug("message.clean_content=%s", str(message.clean_content))
         except:
             exc_type, exc_val, tb = sys.exc_info()
             logging.error(traceback.format_exception(exc_type, exc_val, tb))
