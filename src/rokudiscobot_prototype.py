@@ -1,5 +1,5 @@
 from util.configloader import Config
-from util import tokenizer
+from util import tokenizer, regalias_gen
 import argparse
 import logging
 import traceback
@@ -43,6 +43,8 @@ def get_mention_reply(message: discord.Message):
         return "いや、わかる"
     elif tokenizer.in_class_of(content, classes={"太郎", "二郎", "花子", "プリウス"}):
         return tokenizer.tokenize_mecab(content)
+    elif regalias_gen.enabled() and re.match(r"^(二つ名|alias)", content):
+        return regalias_gen.generate_alias()
     elif "yo" in content.lower():
         return "yo"
     return "わかる"
@@ -130,7 +132,7 @@ def debug_on_console():
         elif re.match(r"^(@\w+)\s+(.*)$", message.content):
             mt = re.match(r"^(@\w+)\s(.*)$", message.content)
             message.author = PseudoUser(mt.groups()[0])
-            message.content = mt.groups()[1]
+            message.content = "<@{}> {}".format("test", mt.groups()[1])
             reply_text = get_mention_reply(message)            
         else:
             reply_text = get_listen_reply(message)
